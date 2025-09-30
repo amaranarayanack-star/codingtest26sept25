@@ -19,7 +19,6 @@ public class TopSalesController {
     @Autowired
     private final TopSellerService topSellerService;
 
-
     public TopSalesController(TopSellerService topSellerService) {
         this.topSellerService = topSellerService;
     }

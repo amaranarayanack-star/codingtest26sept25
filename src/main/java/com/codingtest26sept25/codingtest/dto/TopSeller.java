@@ -19,4 +19,8 @@ public class TopSeller{
     this.productId=productId;
     }
 
+    public TopSeller(){
+
+    }
+
 }

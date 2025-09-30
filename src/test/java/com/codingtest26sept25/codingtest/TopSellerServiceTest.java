@@ -24,47 +24,16 @@ public class TopSellerServiceTest {
     @InjectMocks
     private TopSellerService topSellerService;
 
-    public static class ProductSold {
-        private Integer productId;
-        private String name;
-        private String category;
-        private Integer quantitySold;
+    @InjectMocks
+    private ProductSold productSold;
 
-        public ProductSold(Integer productId, String name, String category, Integer quantitySold) {
-            this.productId = productId;
-            this.name = name;
-            this.category = category;
-            this.quantitySold = quantitySold;
-        }
+    @InjectMocks
 
-        public Integer getProductId() { return productId; }
-        public String getName() { return name; }
-        public String getCategory() { return category; }
-        public Integer getQuantitySold() { return quantitySold; }
-    }
+    private TopSeller topSeller;
 
-    public static class TopSeller {
-        private String category;
-        private Integer productId;
-        private String name;
-        private Integer quantitySold;
 
-        public TopSeller(String category, Integer productId, String name, Integer quantitySold) {
-            this.category = category;
-            this.productId = productId;
-            this.name = name;
-            this.quantitySold = quantitySold;
-        }
-
-        public String getCategory() { return category; }
-        public Integer getProductId() { return productId; }
-        public String getName() { return name; }
-        public Integer getQuantitySold() { return quantitySold; }
-    }
-
-    // Happy path testing
+    // Happy path flow
     @Test
-    @DisplayName("happy path for top sellers")
     void testGetTopSellersWithNoTies() {
         List<ProductSold> sales = Arrays.asList(
                 new ProductSold(1, "Laptop", "Electronics", 100),
@@ -82,9 +51,8 @@ public class TopSellerServiceTest {
         assertEquals("Apple", result.stream().filter(p -> p.getCategory().equals("Grocery")).findFirst().get().getName());
     }
 
-    // Test tie-breaker
+    // Test In case of same quantity is sold"
     @Test
-    @DisplayName("tie-breaker for ties in quantitySold")
     void testGetTopSellersWithTie() {
         List<ProductSold> sales = Arrays.asList(
                 new ProductSold(7, "Bag", "Accessories", 50),
@@ -97,9 +65,8 @@ public class TopSellerServiceTest {
         assertEquals("Earrings", result.get(0).getName());
     }
 
-    // Test for multiple products with identical quantity in a category
+    // Test for multiple products with same quantity in a category
     @Test
-    @DisplayName("handle multiple products with same quantity in a category")
     void testMultipleTies() {
         List<ProductSold> sales = Arrays.asList(
                 new ProductSold(20, "Notebook", "Office", 50),
@@ -113,18 +80,16 @@ public class TopSellerServiceTest {
         assertEquals("Paper", result.get(0).getName());
     }
 
-    // Test for an empty sales list
+    // empty sales list
     @Test
-    @DisplayName("return an empty list for an empty sales list")
     void testEmptySalesList() {
         List<ProductSold> sales = Collections.emptyList();
         List<TopSeller> result = topSellerService.getCategoryWiseTopSales(sales);
         assertTrue(result.isEmpty());
     }
 
-    // Test for a single product in a single category
+    // Single product single category
     @Test
-    @DisplayName(" handle single product input correctly")
     void testSingleProduct() {
         List<ProductSold> sales = Arrays.asList(
                 new ProductSold(10, "T-Shirt", "Clothing", 120)

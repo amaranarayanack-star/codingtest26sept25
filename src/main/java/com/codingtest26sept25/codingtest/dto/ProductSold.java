@@ -14,6 +14,17 @@ public class ProductSold {
     private String category;
     private int quantitySold;
 
+    public ProductSold(int productId, String name, String category, int quantitySold) {
+        this.productId=productId;
+        this.name=name;
+        this.category=category;
+        this.quantitySold=quantitySold;
+    }
+
+    public ProductSold(){
+
+    }
+
     //Override the toString method to pass the dto
     @Override
     public String toString() {
